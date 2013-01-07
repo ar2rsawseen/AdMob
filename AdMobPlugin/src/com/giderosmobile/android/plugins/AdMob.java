@@ -10,8 +10,9 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.google.ads.*;
+import com.google.ads.AdRequest.ErrorCode;
 
-public class AdMob{
+public class AdMob implements AdListener {
 	
 	//reference to main activity
 	private static WeakReference<Activity> sActivity;
@@ -21,6 +22,7 @@ public class AdMob{
 	private static RelativeLayout.LayoutParams params;
 	//AdMob adview
 	private static AdView adView;
+	private static InterstitialAd interstitial;
 	//current type of AdMob banner
 	private static AdSize currentType;
 	//all AdMob banner types
@@ -30,11 +32,14 @@ public class AdMob{
 	private static Hashtable<String, Integer> alignVer;
 	private static String curHorAlignment = "center";
 	private static String curVerAlignment = "top";
+	//reference to instance
+	private static AdMob self;
 	
 	//on create event from Gideros
 	//receives reference to current activity
 	public static void onCreate(Activity activity)
 	{
+		self = new AdMob();
 		//reference to activity
 		sActivity =  new WeakReference<Activity>(activity);
 		
@@ -81,7 +86,7 @@ public class AdMob{
 	}
 	
 	//load an Ad
-	public static void loadAd(final String admobID, String adType)
+	public static void loadAd(final String admobID, final String adType)
 	{
 		//get current ad type
 		currentType = adTypes.get(adType);
@@ -99,10 +104,22 @@ public class AdMob{
 						adView.destroy();
 					}
 					
-					// Create the adView with your publisher ID and type
-					adView = new AdView(sActivity.get(), currentType, admobID);
-					layout.addView(adView, params);
-					adView.loadAd(new AdRequest());
+					if(adType.equals("interstitial"))
+					{
+						interstitial = new InterstitialAd(sActivity.get(), admobID);
+						
+						AdRequest adRequest = new AdRequest();
+						//adRequest.addTestDevice("545D828B0002576098659942B35646D7");
+						interstitial.loadAd(adRequest);
+						interstitial.setAdListener(self);
+					}
+					else
+					{
+						// Create the adView with your publisher ID and type
+						adView = new AdView(sActivity.get(), currentType, admobID);
+						layout.addView(adView, params);
+						adView.loadAd(new AdRequest());
+					}
 				}
 			});
 		
@@ -199,6 +216,34 @@ public class AdMob{
 		catch(Exception ex)	{}
 	}
 	
-	
+	public void onReceiveAd(Ad ad) {
+		if (ad == interstitial) {
+			interstitial.show();
+		}
+	}
+
+	@Override
+	public void onDismissScreen(Ad arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onFailedToReceiveAd(Ad arg0, ErrorCode arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLeaveApplication(Ad arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPresentScreen(Ad arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

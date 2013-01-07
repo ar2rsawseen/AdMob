@@ -34,12 +34,8 @@ static int loadAd(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jloadAd == NULL)
@@ -70,7 +66,11 @@ static int loadAd(lua_State *L)
 	}
 	
 	//call java method with parameters
-	ENV->CallStaticVoidMethod(cls, jloadAd, ENV->NewStringUTF(admobID), ENV->NewStringUTF(adType));
+	jstring jAdmobID = ENV->NewStringUTF(admobID);
+	jstring jAdType = ENV->NewStringUTF(adType);
+	ENV->CallStaticVoidMethod(cls, jloadAd, jAdmobID, jAdType);
+	ENV->DeleteLocalRef(jAdmobID);
+	ENV->DeleteLocalRef(jAdType);
 	
 	return 1;
 }
@@ -81,12 +81,8 @@ static int removeAd(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jRemoveAd == NULL)
@@ -112,12 +108,8 @@ static int setAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jSetAlignment == NULL)
@@ -157,7 +149,11 @@ static int setAlignment(lua_State *L)
 	}
 	
 	//call java method with parameters
-	ENV->CallStaticVoidMethod(cls, jSetAlignment, ENV->NewStringUTF(horAlign), ENV->NewStringUTF(verAlign));
+	jstring jHor = ENV->NewStringUTF(horAlign);
+	jstring jVer = ENV->NewStringUTF(verAlign);
+	ENV->CallStaticVoidMethod(cls, jSetAlignment, jHor, jVer);
+	ENV->DeleteLocalRef(jHor);
+	ENV->DeleteLocalRef(jVer);
 	
 	return 1;
 }
@@ -168,12 +164,8 @@ static int setHorizontalAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jSetHorAl == NULL)
@@ -191,7 +183,9 @@ static int setHorizontalAlignment(lua_State *L)
 	const char *horAlign = lua_tostring(L, 1);
 	
 	//call java method with parameters
-	ENV->CallStaticVoidMethod(cls, jSetHorAl, ENV->NewStringUTF(horAlign));
+	jstring jHor = ENV->NewStringUTF(horAlign);
+	ENV->CallStaticVoidMethod(cls, jSetHorAl, jHor);
+	ENV->DeleteLocalRef(jHor);
 	
 	return 1;
 }
@@ -202,12 +196,8 @@ static int setVerticalAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jSetVerAl == NULL)
@@ -225,7 +215,9 @@ static int setVerticalAlignment(lua_State *L)
 	const char *verAlign = lua_tostring(L, 1);
 	
 	//call java method with parameters
-	ENV->CallStaticVoidMethod(cls, jSetVerAl, ENV->NewStringUTF(verAlign));
+	jstring jVer = ENV->NewStringUTF(verAlign);
+	ENV->CallStaticVoidMethod(cls, jSetVerAl, jVer);
+	ENV->DeleteLocalRef(jVer);
 	
 	return 1;
 }
@@ -236,12 +228,8 @@ static int setVisible(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jSetVisible == NULL)
@@ -270,12 +258,8 @@ static int getHorizontalAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jGetHorAl == NULL)
@@ -305,12 +289,8 @@ static int getVerticalAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jGetVerAl == NULL)
@@ -340,12 +320,8 @@ static int getAlignment(lua_State *L)
 	//if no Java Env, exit
 	if(ENV == NULL) return 0;
 	
-	//if no class, try to retrieve it
-	if(cls == NULL)
-	{
-		cls = ENV->FindClass(javaClassName);
-		if(!cls) return 0;
-	}
+	//check if there is a class
+	if(!cls) return 0;
 	
 	//if we don't have method yet, try to retrieve it
 	if(jGetHorAl == NULL)
@@ -412,6 +388,13 @@ static void g_initializePlugin(lua_State *L)
 	//get java environment reference
 	ENV = g_getJNIEnv();
 	
+	jclass class_local = ENV->FindClass(javaClassName);
+	if(class_local)
+	{
+		cls = static_cast<jclass>(ENV->NewGlobalRef(class_local)); // <-- Create the global reference
+		ENV->DeleteLocalRef(class_local); // <-- Delete the local reference
+	}
+	
 	//get global package object
 	lua_getglobal(L, "package");
 	lua_getfield(L, -1, "preload");
@@ -427,7 +410,7 @@ static void g_initializePlugin(lua_State *L)
 //and here we free everything we need to free
 static void g_deinitializePlugin(lua_State *L)
 {
-
+	ENV->DeleteGlobalRef(cls);
 }
 
 //register our plugin with Gideros lib
